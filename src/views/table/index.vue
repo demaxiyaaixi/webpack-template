@@ -1,13 +1,6 @@
 <template>
   <div class="app-container">
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      fit
-      highlight-current-row
-    >
+    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
           {{ scope.$index }}
@@ -45,10 +38,11 @@
 
 <script>
 import { getList } from '@/api/table'
+import { getAnswer } from '@/api/test'
 
 export default {
   filters: {
-    statusFilter(status) {
+    statusFilter (status) {
       const statusMap = {
         published: 'success',
         draft: 'gray',
@@ -57,20 +51,28 @@ export default {
       return statusMap[status]
     }
   },
-  data() {
+  data () {
     return {
       list: null,
       listLoading: true
     }
   },
-  created() {
-    this.fetchData()
+  created () {
+    //this.fetchData()
+    this.testData()
   },
   methods: {
-    fetchData() {
+    fetchData () {
       this.listLoading = true
       getList().then(response => {
         this.list = response.data.items
+        this.listLoading = false
+      })
+    },
+    testData () {
+      this.listLoading = true
+      getAnswer().then(response => {
+        console.log(response)
         this.listLoading = false
       })
     }
